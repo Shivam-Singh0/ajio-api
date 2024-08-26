@@ -1,0 +1,27 @@
+# Node.js specific
+node_modules/
+npm-debug.log
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.bak
+*.tmp
+*.log
+*.sync
+
+# Environment variables
+.env
+.env.*
+
+# Secret files
+secrets.json
+config.json
+
+# Generated files
+build/
+dist/
+coverage/
