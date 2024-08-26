@@ -1,3 +1,4 @@
+import { query } from "express";
 import Products from "../models/Products.js"
 
 export const addProduct = async (req, res) => {
@@ -20,12 +21,29 @@ export const addProduct = async (req, res) => {
 }
 
 export const getAllProduct = async(req, res) => {
-    try {
-        const products = await Products.find({})
-        res.status(200).json(products)
-    } catch (error) {
-        res.status(500).json(error.message);
+    const {query} = req.query
+    if (query) {
+        try {
+            let products = []
+             products = await Products.find({$or : [
+                {title: {$regex: query, $options: "i"}},
+                {category: {$regex: query, $options: "i"}},
+            ]})
+            res.status(200).json(products)
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
     }
+    else {
+        try {
+            const products = await Products.find({})
+            res.status(200).json(products)
+        } catch (error) {
+            res.status(500).json(error.message);
+        }
+
+    }
+    
 }
 
 export const getSingleProduct = async(req, res) => {
