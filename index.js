@@ -12,6 +12,10 @@ dotenv.config({ path: './.env' })
 
 connectToDb();
 
+app.use(express.static('./Public'))
+app.get('/', (req, res) => {
+    res.sendFile('./Public/index.html')
+})
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
