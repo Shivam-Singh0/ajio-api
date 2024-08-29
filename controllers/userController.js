@@ -72,7 +72,10 @@ export const loginUser = async (req, res) => {
 export const logOut = async (req, res) => {
   res.cookie("token", "", {
     httpOnly: true,
+    secure: true, // Include this if your app is running on HTTPS
     expires: new Date(0),
+    path: "/", // Ensure this matches the path used when setting the cookie
+    // domain: "yourdomain.com", // Ensure this matches the domain used when setting the cookie
   });
   res.status(200).json({ message: "Logged out successfully"});
 };
