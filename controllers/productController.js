@@ -25,10 +25,14 @@ export const getAllProduct = async(req, res) => {
     if (query) {
         try {
             let products = []
-             products = await Products.find({$or : [
-                {title: {$regex: query, $options: "i"}},
-                {category: {$regex: query, $options: "i"}},
-            ]})
+             products = await Products.find({
+                $or: [
+                    { title: { $regex: `[-\\s]*${query.replace(/[-\\s]/g, '[-\\s]*')}`, $options: "i" } },
+                    { category: { $regex: `[-\\s]*${query.replace(/[-\\s]/g, '[-\\s]*')}`, $options: "i" } }
+                ]
+            })
+
+            
             res.status(200).json(products)
         } catch (error) {
             res.status(500).json(error.message);

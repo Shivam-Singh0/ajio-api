@@ -1,32 +1,39 @@
-import jwt from 'jsonwebtoken'
-import User from '../models/User.js'
-export const Authenticated = async (req, res, next) => {
+import admin from 'firebase-admin';
 
-    const token = await req.cookies.token
-   
-    if (token) {
+import serviceAccount from "./serviceAccountKey.json" assert { type: "json" };;
 
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET)
-            req.user = await User.findById(decoded.id).select('-password')
-            next();
-        } catch (error) {
-            return res.status(401).json({ message: 'Not authenticated' })
-            
-        }
 
-    }else{
-        res.status(401).json({ message: 'Not authenticated' })
+admin.initializeApp({
+
+  credential: admin.credential.cert(serviceAccount)
+
+});
+
+
+const authenticateUser = async (req, res, next) => {
+  try {
+
+
+    // Extract the token from the Authorization header
+    const token =  req.headers.authorization?.split('Bearer ')[1];
+
+
+    if (!token) {
+      return res.status(403).json({ message: 'No token provided, Unauthorized' });
     }
-}
-export const Admin = async (req, res, next) => {
 
-    if (req.user && req.user.admin) {
-        next();   
-    }
-    else{
-        res.status(401).json({ message: 'Not authorized as an admin' })
-        
-    }
-}
+    // Verify the token using Firebase Admin SDK
+    const decodedToken = await admin.auth().verifyIdToken(token);
 
+    // Attach the user info to the request object
+    req.user = decodedToken;
+
+    // Proceed to the next middleware
+    next();
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return res.status(403).json({ message: 'Invalid token, Unauthorized' });
+  }
+};
+
+export default authenticateUser;

@@ -2,14 +2,17 @@ import Cart from "../models/Cart.js";
 import Products from "../models/Products.js";
 
 export const addToCart = async (req, res) => {
-  const { productId } = req.body;
-  const userId = req.user._id;
+  const { id, title, price, image } = req.body;
+  
 
-  if (!productId) {
+  const userId = req.user.uid;
+
+  if (!id) {
     return res.status(400).json("productId is required");
   }
   try {
-    const product = await Products.findById(productId);
+    const product = await Products.findById(id);
+    
     if (!product) {
         return res.status(500).json("product not found");
     }
@@ -19,21 +22,22 @@ export const addToCart = async (req, res) => {
 
   try {
     const cart = await Cart.findOne({ userId });
+    
     if (cart) {
       const productIndex = cart.products.findIndex(
-        (p) => p.productId.toString() === productId
+        (p) => p.id.toString() === id
       );
       if (productIndex > -1) {
         cart.products[productIndex].quantity += 1;
       } else {
-        cart.products.push({ productId, quantity: 1 });
+        cart.products.push({ id,title, price, image, quantity: 1  });
       }
       await cart.save();
       return res.status(200).json(cart);
     } else {
       const cart = await Cart.create({
         userId,
-        products: [{ productId, quantity: 1 }],
+        products: [{ id,title, price, image, quantity: 1 }],
       });
       return res.status(201).json(cart);
     }
@@ -43,26 +47,29 @@ export const addToCart = async (req, res) => {
 };
 
 export const updateQuantity = async (req, res) => {
-  const { productId, qty } = req.body;
-  const userId = req.user._id;
+  const { productId, quantity } = req.body;
+  console.log(productId, quantity)
+  const userId = req.user.uid;
   if (!productId) {
     return res.status(400).json("productId is required");
-  } else if (!qty) {
+  } else if (!quantity) {
     return res.status(400).json("quantity is required");
-  }else if(qty<1){
+  }else if(quantity<1){
     return res.status(400).json("quantity must be greater than 0");
 
   }
 
   try {
+   
     const cart = await Cart.findOne({ userId });
     if (cart) {
+      
       const productIndex = cart.products.findIndex(
-        (p) => p.productId.toString() === productId);
+        (p) => p.id.toString() === productId);
 
       if (productIndex > -1) {
        
-        cart.products[productIndex].quantity = qty;
+        cart.products[productIndex].quantity = quantity;
         await cart.save();
         return res.status(200).json(cart);
       } else {
@@ -72,12 +79,13 @@ export const updateQuantity = async (req, res) => {
       return res.status(404).json("Cart not found");
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json(error.message);
   }
 }
 
 export const getCart = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user.uid;
   try {
     const cart = await Cart.findOne({ userId });
     if (cart) {
@@ -86,6 +94,39 @@ export const getCart = async (req, res) => {
       return res.status(404).json("Cart not found");
     }
   } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message); 
+  }
+}
+
+export const removeFromCart = async(req, res) => {
+  const userId = req.user.uid;
+  const { productId } = req.body;
+  if (!productId) {
+    return res.status(400).json("productId is required");
+  }
+  try {
+    const cart = await Cart.findOne({ userId });
+    if (cart) {
+      const productIndex = cart.products.findIndex(
+        (p) => p.id.toString() === productId
+      );
+      if (productIndex > -1) {
+        cart.products.splice(productIndex, 1);
+        await cart.save();
+        if (cart.products.length === 0) {
+          await Cart.findByIdAndDelete(cart._id);
+        }
+
+        return res.status(200).json(cart);
+      } else {
+        return res.status(404).json("Product not found in cart");
+      }
+    } else {
+      return res.status(404).json("Cart not found");
+    }
+  } catch (error) {
+    console.log(error);
     return res.status(500).json(error.message);
   }
 }
