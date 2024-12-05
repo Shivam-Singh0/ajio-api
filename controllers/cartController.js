@@ -7,6 +7,8 @@ export const addToCart = async (req, res) => {
 
   const userId = req.user.uid;
 
+  
+
   if (!id) {
     return res.status(400).json("productId is required");
   }
@@ -86,6 +88,7 @@ export const updateQuantity = async (req, res) => {
 
 export const getCart = async (req, res) => {
   const userId = req.user.uid;
+ 
   try {
     const cart = await Cart.findOne({ userId });
     if (cart) {

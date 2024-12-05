@@ -6,6 +6,8 @@ import userRoutes from './routes/userRoutes.js'
 import cookieParser from 'cookie-parser';
 import cartRouter from './routes/cartRoutes.js'
 import productRoutes from './routes/productRoutes.js'
+import wishlistRoutes from './routes/wishRoutes.js'
+
 
 const app = express()
 dotenv.config({ path: './.env' })
@@ -23,5 +25,6 @@ app.use(cors())
 app.use('/api/auth', userRoutes)
 app.use('/api/product', productRoutes)
 app.use('/api/cart', cartRouter)
+app.use('/api/wishlist', wishlistRoutes)
 app.listen(`3000`, () => console.log(`server running on port 3000`));
 
