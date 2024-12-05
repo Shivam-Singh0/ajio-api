@@ -115,7 +115,9 @@ export const removeFromCart = async(req, res) => {
         cart.products.splice(productIndex, 1);
         await cart.save();
         if (cart.products.length === 0) {
-          await Cart.findByIdAndDelete(cart._id);
+         cart.products = [];
+         await cart.save()
+         return res.status(200).json(cart)
         }
 
         return res.status(200).json(cart);
