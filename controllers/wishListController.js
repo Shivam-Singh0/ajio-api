@@ -46,8 +46,7 @@ export const removeWishlist = async(req, res) => {
 
 export const getWishlist = async(req, res) => {
     const userId = req.user.uid;
-    const {productId} = req.body;
-
+ 
     const wishlist = await WishList.findOne({userId});
     if (wishlist) {
         return res.status(200).json(wishlist);
@@ -55,3 +54,21 @@ export const getWishlist = async(req, res) => {
         return res.status(400).json("First add product to wishlist");   
     }
 }
+
+export const isWishlisted = async (req, res) => {
+    const {productId} = req.body;
+    let wishlisted = false;
+    const wishlist = await WishList.findOne({userId})
+    if (wishlist) {
+        const idx = wishlist.Products.findIndex((p) => p.id === productId);
+        if (idx > -1) {
+            wishlisted = true;
+        }
+       
+    }else{
+        wishlisted = false;
+    }
+
+    return  res.status(200).json(wishlisted);
+}
+
