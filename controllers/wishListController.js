@@ -8,7 +8,7 @@ export const addToWishlist = async(req, res) => {
     try {
         let wishlist = await WishList.findOne({userId})
         if (wishlist) {
-            wishlist.Products.push(product)
+            wishlist.Products.push({title,id: productId, image, price})
             await wishlist.save()
             
         }
