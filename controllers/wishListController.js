@@ -2,19 +2,19 @@ import WishList from "../models/WishList.js";
 
 export const addToWishlist = async(req, res) => {
     const userId = req.user.uid;
-    const {title, productId, image, price} = req.body;
+    const {title, productId, image, price, rating} = req.body;
  
 
     try {
         let wishlist = await WishList.findOne({userId})
         if (wishlist) {
-            wishlist.Products.push({title,id: productId, image, price})
+            wishlist.Products.push({title,id: productId, image, price, rating})
             await wishlist.save()
             
         }
         else{
             try {
-                wishlist =  await WishList.create({userId, Products: [{title,id: productId, image, price}]})
+                wishlist =  await WishList.create({userId, Products: [{title,id: productId, image, price, rating}]})
     
             } catch (error) {
                 console.log(error);

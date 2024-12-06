@@ -11,6 +11,16 @@ const wishlistSchema = new mongoose.Schema({
             id : {
                 type : mongoose.Schema.Types.ObjectId
             },
+            rating: {
+                rate:{
+                    type: Number,
+                    default: 0
+                },
+                count: {
+                    type: Number,
+                    default: 0
+                }
+             },
             title :{
                 type: String,
                 required: true
