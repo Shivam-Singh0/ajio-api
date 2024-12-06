@@ -14,7 +14,7 @@ export const addToWishlist = async(req, res) => {
         }
         else{
             try {
-                wishlist =  await WishList.create({userId, Products: [{title, productId, image, price}]})
+                wishlist =  await WishList.create({userId, Products: [{title,id: productId, image, price}]})
     
             } catch (error) {
                 console.log(error);
