@@ -57,6 +57,7 @@ export const getWishlist = async(req, res) => {
 
 export const isWishlisted = async (req, res) => {
     const {productId} = req.body;
+    const userId = req.user.uid;
     let wishlisted = false;
     const wishlist = await WishList.findOne({userId})
     if (wishlist) {
