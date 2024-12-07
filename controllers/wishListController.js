@@ -61,7 +61,7 @@ export const isWishlisted = async (req, res) => {
     let wishlisted = false;
     const wishlist = await WishList.findOne({userId})
     if (wishlist) {
-        const idx = wishlist.Products.findIndex((p) => p.id === productId);
+        const idx = wishlist.Products.findIndex((p) => p.id.toString() === productId);
         if (idx > -1) {
             wishlisted = true;
         }
