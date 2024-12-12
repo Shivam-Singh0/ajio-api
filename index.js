@@ -27,6 +27,6 @@ app.use('/api/auth', userRoutes)
 app.use('/api/product', productRoutes)
 app.use('/api/cart', cartRouter)
 app.use('/api/wishlist', wishlistRoutes)
-app.use('/api/adress', addressRoutes)
+app.use('/api/address', addressRoutes)
 app.listen(`3000`, () => console.log(`server running on port 3000`));
 
