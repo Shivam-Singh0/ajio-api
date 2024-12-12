@@ -16,7 +16,7 @@ export const addAdress = async(req, res) => {
     }
     else  {
         try {
-            address = await Address.create({userId, adress : [req.body]})
+            address = await Address.create({userId, address : [req.body]})
             return res.status(200).json(address);
         }catch {
             return res.status(400).json(error);   
