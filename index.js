@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import cartRouter from './routes/cartRoutes.js'
 import productRoutes from './routes/productRoutes.js'
 import wishlistRoutes from './routes/wishRoutes.js'
+import addressRoutes from './routes/adressRoutes.js'
 
 
 const app = express()
@@ -26,5 +27,6 @@ app.use('/api/auth', userRoutes)
 app.use('/api/product', productRoutes)
 app.use('/api/cart', cartRouter)
 app.use('/api/wishlist', wishlistRoutes)
+app.use('/api/adress', addressRoutes)
 app.listen(`3000`, () => console.log(`server running on port 3000`));
 
