@@ -9,27 +9,27 @@ const addressSchema = new mongoose.Schema({
     {
       Name: {
         type: String,
-        require: true,
+        required: true,
       },
       Mobile: {
         type: Number,
-        require: true,
+        required: true,
       },
       Pincode: {
         type: Number,
-        require: true,
+        required: true,
       },
       Locality: {
         type : String,
-        require : true
+        required : true
       },
       Flat: {
         type : String,
-        require : true
+        required : true
       },
       District: {
         type : String,
-        require : true
+        required : true
       },
       Landmark : {
         type : String,
@@ -37,11 +37,11 @@ const addressSchema = new mongoose.Schema({
       },
       State : {
         type : String,
-        require : true
+        required : true
       },
       City : {
         type : String,
-        require : true
+        required : true
       }
     },
   ],
