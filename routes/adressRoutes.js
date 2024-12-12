@@ -3,5 +3,5 @@ import authenticateUser from "../middleware/authMiddleware.js";
 import { addAdress } from "../controllers/AddressController.js";
 
 const router = express.Router();
-router.route("").get().post(authenticateUser, addAdress);
+router.route("").post(authenticateUser, addAdress);
 export default router;
