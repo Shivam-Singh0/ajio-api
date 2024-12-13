@@ -24,3 +24,13 @@ export const addAdress = async(req, res) => {
         }
     }
 }
+
+export const getAddress = async(req, res) => {
+    const userId = req.user.uid;
+    const address = await Address.findOne({userId});
+    if (address) {
+        return res.status(200).json(address.address)
+    }else{
+        res.status(500).json("no address found");
+    }
+}
