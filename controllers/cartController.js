@@ -1,5 +1,9 @@
+
+import Stripe from "stripe";
 import Cart from "../models/Cart.js";
 import Products from "../models/Products.js";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const addToCart = async (req, res) => {
   const { id, title, price, image } = req.body;
@@ -134,4 +138,28 @@ export const removeFromCart = async(req, res) => {
     console.log(error);
     return res.status(500).json(error.message);
   }
+}
+
+export const CheckoutSession = async(req, res) => {
+  const {products} = req.body;
+  const lineItems = products.map((product) => ({
+    price_data: {
+      currency: "inr",
+      product_data: {
+        name: product.title,
+        images: [product.image],
+      },
+      unit_amount: Math.floor(product.price * 100),
+    },
+    quantity: product.quantity,
+  }));
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: lineItems,
+    mode: "payment",
+    success_url: "http://localhost:5173/success",
+    cancel_url: "http://localhost:5173/cancel",
+
+  })
+  res.json({id: session.id})
 }
