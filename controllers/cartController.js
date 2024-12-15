@@ -2,6 +2,7 @@
 import Stripe from "stripe";
 import Cart from "../models/Cart.js";
 import Products from "../models/Products.js";
+import Orders from "../models/Orders.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -162,4 +163,15 @@ export const CheckoutSession = async(req, res) => {
 
   })
   res.json({id: session.id})
+}
+
+export const createOrder = async(req, res) => {
+  const {products} = req.body;
+  const userId = req.user.uid;
+  try {
+    const order = await Orders.create({userId, products});
+    return res.status(200).json(order);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
 }
