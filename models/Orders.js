@@ -24,7 +24,11 @@ const orderSchema = new mongoose.Schema({
                 required : true
             }
         }
-    ]
+    ],
+    delivered : {
+        type: Boolean,
+        default: false
+    }
 
-})
+},{ timestamps: true})
 export default mongoose.model("Order", orderSchema)

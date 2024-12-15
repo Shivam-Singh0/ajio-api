@@ -169,8 +169,21 @@ export const createOrder = async(req, res) => {
   const {products} = req.body;
   const userId = req.user.uid;
   try {
-    const order = await Orders.create({userId, products});
+     const order = await Orders.create({userId, products});
+    const cart = await Cart.findOne({userId});
+    cart.products = [];
+    await cart.save();
     return res.status(200).json(order);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+
+export const getOrder = async(req, res) => {
+  const userId = req.user.uid;
+  try {
+    const orders = await Orders.find({userId});
+    return res.status(200).json(orders);
   } catch (error) {
     return res.status(500).json(error.message);
   }
