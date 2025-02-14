@@ -158,8 +158,8 @@ export const CheckoutSession = async(req, res) => {
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
-    success_url: "https://ajio-clone-git-main-shivam-singh0s-projects.vercel.app/success",
-    cancel_url: "https://ajio-clone-git-main-shivam-singh0s-projects.vercel.app/",
+    success_url: "https://ajiilo-ecom.vercel.app/success",
+    cancel_url: "https://ajiilo-ecom.vercel.app/cancel",
 
   })
   res.json({id: session.id})
